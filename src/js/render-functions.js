@@ -1,6 +1,10 @@
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 export const renderImages = (values, element) => {
+    if (values.length === 0) {
+        iziToast.error({ message: "Sorry, there are no images matching your search query. Please try again!", position: "topRight" })
+        return
+    }
     const markup = values
         .map(value => {
         return `<li class="list-item">
@@ -36,9 +40,8 @@ export const renderImages = (values, element) => {
     
 };
 export const iziToastShow = () => {
-    iziToast.error({message:"Sorry, there are no images matching your search query. Please try again!", position: "topRight"})
+    iziToast.error({message:"Please fill the field!", position: "topRight"})
 }
-
 export const showLoader = (element) => {
     element.style.display = "inline-block";
 }
