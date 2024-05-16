@@ -1,5 +1,5 @@
 import { getRequestApi } from "./js/pixabay-api";
-import { renderImages, showLoader, hideLoader } from "./js/render-functions";
+import { renderImages, showLoader, hideLoader, iziToastShow} from "./js/render-functions";
 import simpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 const btnEl = document.querySelector('.btnSubmit');
@@ -16,12 +16,24 @@ const lightbox = new simpleLightbox('.list a', {
         captionsData: 'alt',
         captionDelay: 250,
 });
-    
+   
 
 formEl.addEventListener('submit', (e) => {
     e.preventDefault();
-    listEl.innerHTML = "";
-    getRequestApi(inputEl.value, listEl, renderImages, showLoader, hideLoader, loaderEl)
-    lightbox.refresh();
+    const inputData = inputEl.value.trim(); 
+    if (inputData === "") {
+        iziToastShow();
+    } else {
+        listEl.innerHTML = "";
+        showLoader(loaderEl)
+        getRequestApi(inputData)
+            .then(data => {
+                renderImages(data, listEl)
+                lightbox.refresh();
+            })
+            .finally(() => {
+                hideLoader(loaderEl)
+            })
+    }
 })
 
